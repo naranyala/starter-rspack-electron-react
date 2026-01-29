@@ -1,9 +1,9 @@
 const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+const HtmlRspackPlugin = require('@rspack/plugin-html').default;
 
 module.exports = {
   mode: process.env.NODE_ENV || 'development',
-  entry: './src/index.js',
+  entry: './src/index.tsx',
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: '[name].[contenthash].js',
@@ -40,8 +40,36 @@ module.exports = {
         },
       },
       {
+        test: /\.tsx?$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'builtin:swc-loader',
+          options: {
+            jsc: {
+              parser: {
+                syntax: 'typescript',
+                tsx: true,
+              },
+              transform: {
+                react: {
+                  runtime: 'automatic',
+                },
+              },
+            },
+          },
+        },
+      },
+      {
         test: /\.css$/,
-        use: ['style-loader', 'css-loader'],
+        use: [
+          {
+            loader: 'style-loader',
+          },
+          {
+            loader: 'css-loader',
+          },
+        ],
+        type: 'javascript/auto',
       },
       {
         test: /\.(png|svg|jpg|jpeg|gif)$/i,
@@ -54,15 +82,42 @@ module.exports = {
     ],
   },
   plugins: [
-    new HtmlWebpackPlugin({
+    new HtmlRspackPlugin({
       template: './src/index.html',
       favicon: './src/assets/favicon.ico',
-      inject: 'body',
     }),
+    {
+      apply: (compiler) => {
+        compiler.hooks.afterEmit.tap('CopyAssetsPlugin', () => {
+          const fs = require('fs');
+          const path = require('path');
+
+          // Copy icon assets to dist directory
+          const assetsDir = path.join(__dirname, 'src', 'assets');
+          const distDir = path.join(__dirname, 'dist');
+
+          // Ensure dist directory exists
+          if (!fs.existsSync(distDir)) {
+            fs.mkdirSync(distDir, { recursive: true });
+          }
+
+          // Copy icon files
+          const iconFiles = ['icon.png', 'icon.ico', 'icon.svg'];
+          iconFiles.forEach(iconFile => {
+            const srcPath = path.join(assetsDir, iconFile);
+            const destPath = path.join(distDir, iconFile);
+            if (fs.existsSync(srcPath)) {
+              fs.copyFileSync(srcPath, destPath);
+              console.log(`Copied ${srcPath} to ${destPath}`);
+            }
+          });
+        });
+      }
+    }
   ],
 
   devServer: {
-    port: 3000,
+    port: 1234, // Changed to match the port used in main.cjs
     hot: true,
     historyApiFallback: true,
   },

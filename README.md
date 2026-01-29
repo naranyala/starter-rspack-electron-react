@@ -4,17 +4,17 @@ A modern, minimal Electron + React.js boilerplate using [RSPack](https://www.rsp
 
 ## Features
 
-- ⚡ **Fast Bundling**: Powered by RSPack, a high-performance Rust-based bundler
-- 🚀 **Modern Stack**: React 17+, TypeScript, Styled Components
-- 💥 **Hot Reload**: Automatic reloading during development
-- 🔧 **TypeScript Support**: Full TypeScript configuration out of the box
-- 🎨 **Styling**: CSS and Styled Components support
-- 📦 **Production Ready**: Built-in packaging with electron-builder
-- ✨ **Code Quality**: Biome.js for formatting and linting
+- **Fast Bundling**: Powered by RSPack, a high-performance Rust-based bundler
+- **Modern Stack**: React 19+, TypeScript, Styled Components
+- **Hot Reload**: Automatic reloading during development
+- **TypeScript Support**: Full TypeScript configuration out of the box
+- **Styling**: CSS and Styled Components support
+- **Production Ready**: Built-in packaging with electron-builder
+- **Code Quality**: Biome.js for formatting and linting
 
 ## Prerequisites
 
-- [Node.js](https://nodejs.org/) (v16 or higher)
+- [Node.js](https://nodejs.org/) (v18 or higher)
 - [Bun](https://bun.sh/) (for faster package management and script execution)
 
 ## Installation
@@ -28,122 +28,95 @@ A modern, minimal Electron + React.js boilerplate using [RSPack](https://www.rsp
 2. Install dependencies:
    ```bash
    bun install
-   # or
-   npm install
    ```
 
 ## Usage
 
 ### Development Mode
 
-Run these commands to start the development server and Electron app:
+Start the development server and Electron app:
 
 ```bash
 # Start the development server with hot reload
 bun run dev
-# or
-npm run dev
 ```
 
-This will:
+This command will:
 - Start the RSPack development server with hot module replacement
 - Launch the Electron app connected to the dev server
-- Enable developer tools for debugging
-
-### Alternative Development Commands
-
-If you prefer to run the processes separately:
-
-```bash
-# Terminal 1: Start RSPack dev server
-bun run rspack-dev
-
-# Terminal 2: Start Electron app in development mode
-bun run electron-dev
-```
+- Enable development features for debugging
 
 ### Production Build
 
-To build the application for production:
+Build the application for production:
 
 ```bash
 # Bundle the application code
 bun run build
-# or
-npm run build
 ```
 
 ### Packaging
 
-To create distributable executables:
+Create distributable executables:
 
 ```bash
 # Create packaged app for your platform
 bun run dist
-# or
-npm run dist
-```
-
-For platform-specific builds:
-
-```bash
-# Create executables without building first
-bun run electron-dist
-# or
-npm run electron-dist
 ```
 
 ## Project Structure
 
 ```
 starter-rspack-electron-react/
-├── main.cjs                 # Electron main process entry point
-├── rspack.config.cjs        # RSPack configuration
-├── package.json             # Project dependencies and scripts
-├── tsconfig.json           # TypeScript configuration
-├── biome.json              # Biome.js configuration for linting/formatting
-├── scripts/                # Development scripts
-│   ├── start-dev.js        # Development server startup script
-│   └── build-icons.js      # Icon building script
+├── main.cjs                    # Electron main process entry point
+├── preload.js                  # Preload script for Electron
+├── rspack.config.cjs           # RSPack configuration
+├── package.json                # Project dependencies and scripts
+├── tsconfig.json               # TypeScript configuration
+├── biome.json                  # Biome.js configuration for linting/formatting
+├── scripts/                    # Development and build scripts
+│   ├── build.js                # Build script
+│   ├── dev-runner.js           # Development server runner
+│   ├── electron-launcher.js    # Electron launcher utility
+│   └── build-icons.js          # Icon building script
 ├── src/
-│   ├── main/               # Electron main process code
-│   │   └── config.js       # Application configuration
-│   ├── renderer/           # Renderer process code (separated for organization)
-│   ├── assets/             # Static assets
-│   ├── App.tsx             # Main React component
-│   ├── index.tsx           # React entry point
-│   ├── index.html          # HTML template
-│   └── index.js            # Legacy JavaScript entry point
-└── dist/                   # Build output directory
+│   ├── main/                   # Electron main process code
+│   │   └── config.js           # Application configuration
+│   ├── renderer/               # React components and logic
+│   │   ├── App.tsx             # Main React component
+│   │   ├── index.tsx           # React entry point
+│   │   └── components/         # React components
+│   ├── assets/                 # Static assets
+│   ├── index.html              # HTML template
+│   └── reset.css               # CSS reset
+└── dist/                       # Build output directory
 ```
 
-## Scripts
+## Available Scripts
 
 | Script | Description |
 |--------|-------------|
-| `dev` | Start development server with auto-reload |
-| `rspack-dev` | Start RSPack development server only |
-| `electron-dev` | Start Electron app in development mode |
-| `start` | Start Electron app in production mode |
+| `dev` | Start development environment with hot reload |
 | `build` | Build application for production |
-| `rspack-build` | Run RSPack build only |
+| `start` | Start Electron app in production mode |
 | `dist` | Build and package application for distribution |
-| `electron-dist` | Package application without rebuilding |
-| `type-check` | Check TypeScript types |
-| `lint` | Lint and fix code with Biome.js |
-| `lint-check` | Check code for linting issues |
-| `format` | Format code with Biome.js |
-| `format-check` | Check code formatting |
 
 ## Technologies Used
 
-- **[Electron](https://www.electronjs.org/)**: Build cross-platform desktop apps with JavaScript, HTML, and CSS
-- **[React](https://reactjs.org/)**: A JavaScript library for building user interfaces
-- **[RSPack](https://www.rspack.dev/)**: A fast Rust-based bundler for web applications
+- **[Electron](https://www.electronjs.org/)**: Cross-platform desktop apps with JavaScript, HTML, and CSS
+- **[React](https://reactjs.org/)**: JavaScript library for building user interfaces
+- **[RSPack](https://www.rspack.dev/)**: Fast Rust-based bundler for web applications
 - **[TypeScript](https://www.typescriptlang.org/)**: Typed superset of JavaScript
 - **[Styled Components](https://styled-components.com/)**: Visual primitives for styling components
 - **[Biome.js](https://biomejs.dev/)**: Formatter, linter, and more for JavaScript/TypeScript
 - **[electron-builder](https://www.electron.build/)**: Solutions for packaging and building Electron apps
+
+## Development Workflow
+
+The development environment uses a client-server architecture:
+1. RSPack serves the React application on `http://localhost:1234`
+2. Electron connects to this development server
+3. Changes to React components trigger hot reload in the Electron window
 
 ## Configuration
 
@@ -153,6 +126,14 @@ The application can be configured via `src/main/config.js`:
 - Web preferences for the renderer process
 - Menu configurations
 - Application metadata
+
+## Troubleshooting
+
+### Common Issues
+
+- If you encounter issues with the development server, ensure that port 1234 is available
+- For build issues, try cleaning the node_modules and reinstalling dependencies
+- If Electron fails to start, verify that all required dependencies are installed
 
 ## Contributing
 
@@ -169,5 +150,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Acknowledgments
 
-- Thanks to the RSPack team for creating a blazing-fast bundler
-- Inspired by various Electron + React starter templates
+- RSPack team for creating a fast Rust-based bundler
+- Electron team for the cross-platform desktop application framework
+- React team for the component-based UI library
