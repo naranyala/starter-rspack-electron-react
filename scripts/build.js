@@ -158,7 +158,7 @@ class Builder {
 
       // Run rspack build
       this.log('info', 'Building frontend assets...');
-      this.executeCommand('npx', ['@rspack/cli', 'build']);
+      this.executeCommand('bunx', ['@rspack/cli', 'build']);
 
       // Copy assets
       this.log('info', 'Copying assets...');

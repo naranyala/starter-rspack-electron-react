@@ -109,7 +109,7 @@ class DevRunner {
     for (let attempt = 1; attempt <= this.config.retries; attempt++) {
       try {
         // Start dev server process (don't wait for it in promise)
-        this.spawnProcess('dev-server', 'npx', ['@rspack/cli', 'serve', `--port=${port}`]);
+        this.spawnProcess('dev-server', 'bunx', ['@rspack/cli', 'serve', `--port=${port}`]);
 
         this.log(
           'info',
@@ -119,12 +119,12 @@ class DevRunner {
         // Wait for startup with simple delay and port check
         await new Promise((resolve) => setTimeout(resolve, this.config.startupDelay));
 
-        const portAvailable = await this.checkPortAvailable(port);
-        if (!portAvailable) {
+        const portInUse = !(await this.checkPortAvailable(port)); // Port is in use if NOT available
+        if (portInUse) {
           this.log('success', `✅ Development server started successfully on port ${port}`);
           return true;
         } else {
-          throw new Error('Server port still available after startup delay');
+          throw new Error('Server port still available after startup delay - server may not have started properly');
         }
       } catch (error) {
         this.log(
@@ -160,7 +160,7 @@ class DevRunner {
         throw new Error(`Main file not found: ${this.config.mainFile}`);
       }
 
-      await this.spawnProcess('electron', 'npx', ['electron', this.config.mainFile, '--start-dev'], {
+      await this.spawnProcess('electron', 'bunx', ['electron', this.config.mainFile, '--start-dev'], {
         verbose: false, // Electron output is noisy in dev mode
       });
 

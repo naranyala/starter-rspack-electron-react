@@ -3,7 +3,16 @@ import './App.css';
 import 'winbox/dist/css/winbox.min.css';
 import WinBox from 'winbox/src/js/winbox';
 import { menuData } from './renderer/menu-data';
-import { generateWindowContent, generateTheme } from './renderer/window-generator';
+import {
+  createElectronIntroWindow,
+  createElectronArchitectureWindow,
+  createElectronSecurityWindow,
+  createElectronPackagingWindow,
+  createElectronNativeApisWindow,
+  createElectronPerformanceWindow,
+  createElectronDevelopmentWindow,
+  createElectronVersionsWindow
+} from './renderer/use-cases';
 
 // Define TypeScript interfaces
 interface MenuItem {
@@ -64,48 +73,23 @@ class Card extends Component<CardProps> {
   handleCardClick = () => {
     const { title, content, index } = this.props;
 
-    // Define different themes for variety
-    const themes = [
-      { name: 'blue', bg: '#4a6cf7', color: 'white' },
-      { name: 'green', bg: '#4ade80', color: 'black' },
-      { name: 'purple', bg: '#a78bfa', color: 'white' },
-      { name: 'red', bg: '#f87171', color: 'white' },
-      { name: 'yellow', bg: '#fbbf24', color: 'black' },
-      { name: 'indigo', bg: '#6366f1', color: 'white' },
-    ];
+    // Map titles to specific window creators
+    const windowCreators: { [key: string]: (options: { title: string; content?: string }) => WinBox } = {
+      'What is Electron?': createElectronIntroWindow,
+      'Electron Architecture': createElectronArchitectureWindow,
+      'Electron Security Best Practices': createElectronSecurityWindow,
+      'Packaging and Distribution': createElectronPackagingWindow,
+      'Native Operating System APIs': createElectronNativeApisWindow,
+      'Performance Optimization': createElectronPerformanceWindow,
+      'Development Workflow': createElectronDevelopmentWindow,
+      'Version Management': createElectronVersionsWindow,
+    };
 
-    // Select a theme based on the index to have consistent colors
-    const theme = themes[index % themes.length];
+    // Use the specific window creator if available, otherwise use a default
+    const windowCreator = windowCreators[title] || createElectronIntroWindow;
 
-    // Generate dynamic content and theme based on the title
-    const dynamicContent = generateWindowContent(title);
-    const windowTheme = generateTheme(title);
-
-    // Create a WinBox window with the generated content
-    const winbox = new WinBox({
-      title: title,
-      html: `<div class="winbox-content"><h3 style="color: ${windowTheme.color};">${title}</h3><div style="color: ${windowTheme.color};" class="winbox-dynamic-content">Loading content...</div></div>`,
-      width: '500px',
-      height: '400px',
-      x: 'center',
-      y: 'center',
-      class: 'modern',
-      background: windowTheme.bg,
-      border: 4,
-    });
-    
-    // Set the content after the window is created using WinBox's body property
-    setTimeout(() => {
-      if (winbox && winbox.body) {
-        const contentDiv = winbox.body.querySelector('.winbox-dynamic-content');
-        if (contentDiv) {
-          contentDiv.innerHTML = dynamicContent;
-        } else {
-          // If we can't find the specific div, replace all content in the body
-          winbox.body.innerHTML = `<div class="winbox-content"><h3 style="color: ${windowTheme.color};">${title}</h3><div style="color: ${windowTheme.color};">${dynamicContent}</div></div>`;
-        }
-      }
-    }, 10);
+    // Create the specific window based on the title
+    windowCreator({ title, content });
   };
 
   render() {

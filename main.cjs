@@ -1,5 +1,5 @@
 // Main process for Electron application
-const { app, BrowserWindow, Menu } = require('electron');
+const { app, BrowserWindow, Menu, ipcMain } = require('electron');
 const path = require('path');
 const url = require('url');
 const fs = require('fs');
@@ -8,6 +8,18 @@ const serve = args.some(val => val === '--start-dev');
 
 // Import configuration from src
 const { appConfig, mainMenuConfig } = require('./src/main/config.js');
+
+// Import backend use-case handlers
+const {
+  registerElectronIntroHandlers,
+  registerElectronArchitectureHandlers,
+  registerElectronSecurityHandlers,
+  registerElectronPackagingHandlers,
+  registerElectronNativeApisHandlers,
+  registerElectronPerformanceHandlers,
+  registerElectronDevelopmentHandlers,
+  registerElectronVersionsHandlers
+} = require('./main/use-cases');
 
 // Enable live reload for development
 // Temporarily disabled to prevent multiple windows during development
@@ -102,13 +114,23 @@ let isAppInitialized = false;
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
+  // Register all use-case handlers
+  registerElectronIntroHandlers();
+  registerElectronArchitectureHandlers();
+  registerElectronSecurityHandlers();
+  registerElectronPackagingHandlers();
+  registerElectronNativeApisHandlers();
+  registerElectronPerformanceHandlers();
+  registerElectronDevelopmentHandlers();
+  registerElectronVersionsHandlers();
+
   createWindow();
   isAppInitialized = true;
 
   // On macOS it's common to re-create a window in the app when the dock icon is clicked
   // and there are no other windows open.
   app.on('activate', () => {
-    // Only create a new window if the app is initialized and no windows exist
+    // Only create new window if the app is initialized and no windows exist
     if (isAppInitialized && BrowserWindow.getAllWindows().length === 0) {
       createWindow();
     }

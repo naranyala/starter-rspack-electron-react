@@ -7,7 +7,7 @@ const path = require('path');
 class Packager {
   constructor() {
     this.config = {
-      buildScript: 'build.js',
+      buildScript: './scripts/build.js',
       electronBuilderCmd: 'electron-builder',
     };
   }
@@ -50,11 +50,11 @@ class Packager {
   checkDependencies() {
     try {
       // Check if electron-builder is available
-      this.executeCommand('npx', ['electron-builder', '--version'], { stdio: 'pipe' });
+      this.executeCommand('bunx', ['electron-builder', '--version'], { stdio: 'pipe' });
       this.log('info', '✅ electron-builder is available');
     } catch (error) {
       throw new Error(
-        'electron-builder is not installed. Please install it with: npm install --save-dev electron-builder'
+        'electron-builder is not installed. Please install it with: bun install --dev electron-builder'
       );
     }
   }
@@ -96,7 +96,7 @@ class Packager {
 
       // Step 2: Package with electron-builder
       this.log('info', 'Step 2/3: Creating distributable packages...');
-      this.executeCommand('npx', [this.config.electronBuilderCmd]);
+      this.executeCommand('bunx', [this.config.electronBuilderCmd]);
 
       // Step 3: Show results
       this.log('info', 'Step 3/3: Verifying output...');
