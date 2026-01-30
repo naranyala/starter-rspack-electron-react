@@ -117,7 +117,7 @@ module.exports = {
   ],
 
   devServer: {
-    port: 1234, // Changed to match the port used in main.cjs
+    port: 3000, // Changed to avoid port conflicts
     hot: true,
     historyApiFallback: true,
   },

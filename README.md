@@ -46,7 +46,7 @@ bun run dist
 
 The starter implements a modular architecture with:
 - Frontend use-cases in `src/renderer/use-cases`
-- Backend use-cases in `main/use-cases`
+- Backend use-cases in `src/use-cases`
 - Clean separation between main and renderer processes
 - WinBox.js window management system
 - Fuzzy search functionality

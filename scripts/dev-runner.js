@@ -9,7 +9,7 @@ const fs = require('fs');
 class DevRunner {
   constructor() {
     this.config = {
-      devServerPort: 1234,
+      devServerPort: 3000,
       mainFile: './main.cjs',
       retries: 3,
       retryDelay: 2000,

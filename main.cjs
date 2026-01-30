@@ -19,7 +19,7 @@ const {
   registerElectronPerformanceHandlers,
   registerElectronDevelopmentHandlers,
   registerElectronVersionsHandlers
-} = require('./main/use-cases');
+} = require('./src/use-cases');
 
 // Enable live reload for development
 // Temporarily disabled to prevent multiple windows during development
@@ -75,7 +75,7 @@ const createWindow = () => {
   });
 
   // Load the appropriate URL based on environment
-  const devUrl = process.env.ELECTRON_START_URL || 'http://localhost:1234';
+  const devUrl = process.env.ELECTRON_START_URL || 'http://localhost:3000';
   const startUrl = serve
     ? devUrl
     : url.format({
