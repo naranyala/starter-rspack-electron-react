@@ -1,10 +1,10 @@
 // Shared React utility functions
 // This file re-exports React utilities from the renderer lib
 
-import { ReactHooksUtils } from '../renderer/lib';
+import { ReactHooksUtils } from '../frontend/lib';
 
 // Re-export all React utilities for backward compatibility
-export * from '../renderer/lib';
+export * from '../frontend/lib';
 
 // For backward compatibility, re-export specific hooks with their old names
 export const useDebounce = ReactHooksUtils.useDebounce;

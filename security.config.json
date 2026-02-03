@@ -1,0 +1,61 @@
+{
+  "security": {
+    "csp": {
+      "enabled": true,
+      "directives": {
+        "default-src": "'self'",
+        "script-src": "'self'",
+        "style-src": "'self' 'unsafe-inline'",
+        "img-src": "'self' data: https:",
+        "font-src": "'self' https:",
+        "connect-src": "'self' https:",
+        "frame-src": "'none'",
+        "object-src": "'none'",
+        "media-src": "'self'",
+        "frame-ancestors": "'none'",
+        "base-uri": "'self'",
+        "form-action": "'self'"
+      }
+    },
+    "sri": {
+      "enabled": true,
+      "algorithm": "sha384"
+    },
+    "codeSigning": {
+      "enabled": true,
+      "certificatePath": "./certs/app.p12",
+      "password": "auto"
+    },
+    "vulnerabilityScanning": {
+      "enabled": true,
+      "tool": "bun-audit",
+      "threshold": "medium"
+    },
+    "dependencyAudit": {
+      "enabled": true,
+      "allowUnknown": false,
+      "rejectOnIssues": true
+    },
+    "hardening": {
+      "enableContextIsolation": true,
+      "disableNodeIntegration": true,
+      "enableSandbox": true,
+      "validateInputs": true,
+      "sanitizeOutputs": true
+    },
+    "encryption": {
+      "algorithm": "AES-256-GCM",
+      "keyRotationDays": 30
+    },
+    "rateLimiting": {
+      "enabled": true,
+      "maxRequests": 100,
+      "windowMs": 60000
+    },
+    "logging": {
+      "securityEvents": true,
+      "piiMasking": true,
+      "retentionDays": 90
+    }
+  }
+}

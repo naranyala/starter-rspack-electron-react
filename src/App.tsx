@@ -1,7 +1,30 @@
+import clsx from 'clsx';
 import type React from 'react';
 import { Component } from 'react';
-import clsx from 'clsx';
-import LeftSidebar from './renderer/components/LeftSidebar';
+import LeftSidebar from './frontend/components/LeftSidebar';
+import {
+  AppContainer,
+  MainContent,
+  Header,
+  HeaderContent,
+  HeaderTitle,
+  HeaderSubtitle,
+  MainArea,
+  SearchContainer,
+  SearchInput,
+  TabFilter,
+  TabButton,
+  CardsList,
+  Card,
+  CardContent,
+  CardTitle,
+  CardTag,
+  CardArrow,
+  NoResults,
+  Footer,
+  SidebarToggle,
+  SidebarBackdrop,
+} from './frontend/styles/redesigned-styles';
 import {
   createElectronArchitectureWindow,
   createElectronDevelopmentWindow,
@@ -11,31 +34,8 @@ import {
   createElectronPerformanceWindow,
   createElectronSecurityWindow,
   createElectronVersionsWindow,
-} from './renderer/features';
+} from './frontend/use-cases';
 import { menuData } from './shared/menu-data';
-import {
-  appContainer,
-  card,
-  cardArrow,
-  cardContent,
-  cardTag,
-  cardTitle,
-  cardWithArrow,
-  cardsList,
-  footer,
-  header,
-  headerContent,
-  headerSubtitle,
-  headerTitle,
-  mainArea,
-  mainContent,
-  noResults,
-  searchContainer,
-  searchInput,
-  sidebarToggle,
-  tabButton,
-  tabFilter,
-} from './renderer/styles/goober';
 
 const categories = [
   { id: 'all', label: 'All' },
@@ -106,82 +106,86 @@ class App extends Component {
     const filteredCards = this.getFilteredCards();
 
     return (
-      <div
-        className={clsx(appContainer, 'App', {
+      <AppContainer
+        className={clsx('App', {
           'sidebar-open': this.state.sidebarOpen,
           'sidebar-closed': !this.state.sidebarOpen,
         })}
       >
         <LeftSidebar isOpen={this.state.sidebarOpen} />
 
-        <div className={mainContent(this.state.sidebarOpen)}>
-          <header className={header}>
-            <button className={sidebarToggle} onClick={this.toggleSidebar}>
-              {this.state.sidebarOpen ? '◀' : '▶'}
-            </button>
-            <div className={headerContent}>
-              <h1 className={headerTitle}>Electron Starter</h1>
-              <p className={headerSubtitle}>Rspack + React + Electron</p>
-            </div>
-          </header>
+        {/* Mobile sidebar backdrop */}
+        <SidebarBackdrop
+          isOpen={this.state.sidebarOpen}
+          onClick={this.toggleSidebar}
+        />
 
-          <main className={mainArea}>
-            <div className={searchContainer}>
-              <input
+        <MainContent isSidebarOpen={this.state.sidebarOpen}>
+          <Header>
+            <SidebarToggle onClick={this.toggleSidebar}>
+              {this.state.sidebarOpen ? '◀' : '▶'}
+            </SidebarToggle>
+            <HeaderContent>
+              <HeaderTitle>Electron Starter</HeaderTitle>
+              <HeaderSubtitle>Rspack + React + Electron</HeaderSubtitle>
+            </HeaderContent>
+          </Header>
+
+          <MainArea>
+            <SearchContainer>
+              <SearchInput
                 type="text"
-                className={searchInput}
                 placeholder="Search features..."
                 value={this.state.searchTerm}
                 onChange={this.handleSearch}
                 aria-label="Search features"
               />
-            </div>
+            </SearchContainer>
 
-            <nav className={tabFilter} role="tablist" aria-label="Feature categories">
+            <TabFilter role="tablist" aria-label="Feature categories">
               {categories.map((cat) => (
-                <button
+                <TabButton
                   key={cat.id}
-                  className={tabButton(this.state.activeTab === cat.id)}
+                  isActive={this.state.activeTab === cat.id}
                   onClick={() => this.handleTab(cat.id)}
                   role="tab"
                   aria-selected={this.state.activeTab === cat.id}
                 >
                   {cat.label}
-                </button>
+                </TabButton>
               ))}
-            </nav>
+            </TabFilter>
 
-            <div className={cardsList} role="list">
+            <CardsList role="list">
               {filteredCards.length > 0 ? (
                 filteredCards.map((card) => (
-                  <div
+                  <Card
                     key={card.id}
-                    className={clsx(card, cardWithArrow)}
                     onClick={() => this.handleCardClick(card)}
                     role="listitem"
                     tabIndex={0}
                     onKeyDown={(e) => e.key === 'Enter' && this.handleCardClick(card)}
                   >
-                    <div className={cardContent}>
-                      <div className={cardTitle}>{card.title}</div>
-                      <span className={cardTag}>{card.category}</span>
-                    </div>
-                    <span className={cardArrow}>→</span>
-                  </div>
+                    <CardContent>
+                      <CardTitle>{card.title}</CardTitle>
+                      <CardTag>{card.category}</CardTag>
+                    </CardContent>
+                    <CardArrow className="card-arrow">→</CardArrow>
+                  </Card>
                 ))
               ) : (
-                <div className={noResults}>No results found</div>
+                <NoResults>No results found</NoResults>
               )}
-            </div>
-          </main>
+            </CardsList>
+          </MainArea>
 
-          <footer className={footer}>
+          <Footer>
             <p>
               Edit <code>src/App.tsx</code> to customize
             </p>
-          </footer>
-        </div>
-      </div>
+          </Footer>
+        </MainContent>
+      </AppContainer>
     );
   }
 }

@@ -14,9 +14,13 @@
     "tsc": "tsc",
     "tsc:watch": "tsc --watch",
     "prebuild": "tsc",
-    "postbuild": "cp dist-ts/main.js main.cjs && cp dist-ts/preload.js preload.js && mkdir -p src/main && cp -r dist-ts/src/main/handlers src/main/",
+    "postbuild": "cp dist-ts/main.js main.cjs && cp dist-ts/preload.js preload.js && mkdir -p src/backend && cp -r dist-ts/src/backend/use-cases src/backend/",
     "clean": "rm -rf dist dist-ts *.cjs *.js",
-    "install": "bun install"
+    "install": "bun install",
+    "security:audit": "bun scripts/run-security-tests.ts",
+    "security:build": "bun scripts/security-build.ts",
+    "security:scan": "bun audit",
+    "security:check": "bun run security:audit && bun run security:scan"
   },
   "author": "naranyala",
   "build": {

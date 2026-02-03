@@ -2,10 +2,10 @@
 // This file re-exports utilities from both main and renderer libs
 
 // Import renderer utilities from new lib structure
-import { HelperUtils, StorageUtils } from '../renderer/lib';
+import { HelperUtils, StorageUtils } from '../frontend/lib';
 
 // Re-export all utilities for backward compatibility
-export * from '../renderer/lib';
+export * from '../frontend/lib';
 
 // For backward compatibility, re-export specific functions with their old names
 export const formatDate = HelperUtils.formatDate;

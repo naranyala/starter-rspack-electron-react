@@ -10,7 +10,7 @@ import {
   registerElectronPerformanceHandlers,
   registerElectronSecurityHandlers,
   registerElectronVersionsHandlers,
-} from './src/main/handlers';
+} from './src/backend/use-cases';
 
 // Define types for our application
 type WindowState = {

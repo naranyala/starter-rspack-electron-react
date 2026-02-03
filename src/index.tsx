@@ -1,8 +1,8 @@
+import { setup } from 'goober';
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App';
-import { setup } from 'goober';
-import { applyGlobalStyles } from './renderer/styles/goober';
+import { applyGlobalStyles } from './frontend/styles/redesigned-styles';
 
 setup(React.createElement);
 applyGlobalStyles();

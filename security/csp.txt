@@ -1,0 +1,1 @@
+default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' https:; connect-src 'self' https:; frame-src 'none'; object-src 'none'; media-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'
