@@ -1,248 +1,102 @@
-# RSPack Electron React Starter
+# Rspack Electron React Starter
 
-A production-ready boilerplate for building high-performance cross-platform desktop applications with modern web technologies. Engineered for enterprise teams and indie developers who demand speed, reliability, and maintainability.
+A modern, Bun-first Electron starter with a React renderer, Rspack bundling, and a multi-window WinBox UI. It ships with a clean main/renderer split, IPC-ready handlers, and a fast dev workflow that is easy to extend into a real product.
 
----
+## Highlights
 
-## Overview
+- Rspack dev server and production bundling with `rspack.config.ts`.
+- Electron main process with secure defaults (`contextIsolation: true`, `nodeIntegration: false`).
+- WinBox-powered multi-window UI with a sidebar, search, and window manager.
+- Demo feature cards and content generators to jump-start UI and IPC flows.
+- TypeScript across main, preload, renderer, and tooling.
+- Bun-first scripts for dev, build, and packaging.
 
-This starter template combines the best-in-class tools for desktop application development: **Electron** for native capabilities, **React 19** for reactive UI, **RSPack** for blazing-fast builds, and **TypeScript** for type safety. Whether you're building internal tools, SaaS applications, or consumer software, this foundation accelerates your path from concept to production.
+## What You Get Out Of The Box
 
----
+- A sidebar-driven UI with searchable feature cards.
+- A WinBox window manager that tracks open windows, focus, minimize, and restore.
+- A feature module pattern in `src/renderer/features/` for creating new windows.
+- IPC handler modules in `src/main/handlers/` with demo data and channel structure.
+- A port-managed dev server that writes `.dev-port.json` for consistent startup.
+- A packaging config for Windows and Linux targets via electron-builder.
 
-## Why Choose This Starter
+## Tech Stack
 
-### Performance First
-RSPack's Rust-based architecture delivers build times up to 10x faster than webpack, with near-instant hot module replacement that keeps developers in flow state.
-
-### Production Ready
-Pre-configured with electron-builder for automated packaging, code signing, and auto-updater integration. Deploy to Windows, macOS, and Linux from a single codebase.
-
-### Clean Architecture
-Modular use-case pattern separates business logic from presentation, making the codebase scalable and testable as your application grows.
-
-### Developer Experience
-Type-safe APIs between main and renderer processes, comprehensive error handling, and debugging configurations that work out of the box.
-
----
-
-## Key Features
-
-**Build Performance**
-- RSPack bundler with Rust-based compilation
-- Instant hot module replacement
-- Optimized production builds with tree shaking
-
-**Modern Stack**
-- React 19 with concurrent features
-- TypeScript 5.9 with strict type checking
-- Electron 40 with latest security patches
-
-**Desktop Capabilities**
-- Native window management with WinBox.js
-- System tray integration ready
-- Auto-updater infrastructure
-- Native API access (file system, notifications, etc.)
-
-**Code Quality**
-- Modular architecture with clean separation
-- Fuzzy search functionality built-in
-- Comprehensive IPC type safety
-- Pre-configured linting and formatting
-
-**Distribution**
-- One-command packaging for all platforms
-- Code signing configuration
-- Installer generation (DMG, MSI, AppImage, DEB)
-- Auto-update server integration hooks
-
----
+- Electron 40
+- React 19
+- Rspack 1.x
+- TypeScript 5.x
+- WinBox
+- Goober (CSS-in-JS)
+- electron-builder
 
 ## Quick Start
 
-### Prerequisites
-
-- Bun v1.0 or higher
-- Node.js v18+ (for Electron compatibility)
-- Git
-
-### Installation
-
 ```bash
-# Clone the repository
-git clone https://github.com/yourusername/starter-rspack-electron-react.git
-cd starter-rspack-electron-react
-
-# Install dependencies
 bun install
-```
-
-### Development
-
-```bash
-# Start development server with hot reload
 bun run dev
 ```
 
-The application will launch with development tools enabled and hot module replacement active.
+## Packaging Targets
 
-### Building
+- Windows `msi` with `dist/icon.ico`.
+- Linux `AppImage` and `deb` with `dist/icon.ico`.
+- macOS DMG layout configured under `build.dmg` in `package.json`.
 
-```bash
-# Create production build
-bun run build
+## Core Scripts
 
-# Test production build locally
-bun run start
-```
+- `bun run dev` start the dev server and Electron (uses `scripts/dev-runner.js`).
+- `bun run build` build renderer assets and copy runtime artifacts.
+- `bun run dist` package the app with electron-builder.
+- `bun run tsc` compile TypeScript to `dist-ts/`.
+- `bun run clean` remove build outputs.
+- `bun run icons` generate or copy icons.
+- `bun run install:electron` attempt a local Electron install.
 
-### Distribution
-
-```bash
-# Package for current platform
-bun run dist
-
-# Package for all platforms (requires proper signing certificates)
-bun run dist -- --mac --win --linux
-```
-
----
-
-## Architecture
+## Architecture Overview
 
 ```
-starter-rspack-electron-react/
+.
+├── main.ts                      # Main process entry (source)
+├── preload.ts                   # Preload entry used at runtime (source)
 ├── src/
-│   ├── main/                    # Electron main process
-│   │   ├── handlers/           # IPC handlers
-│   │   └── use-cases/          # Backend business logic
-│   ├── renderer/               # React application
-│   │   ├── components/         # UI components
-│   │   ├── features/           # Feature modules
-│   │   ├── use-cases/          # Frontend business logic
-│   │   └── utils/              # Utilities (WinBox, etc.)
-│   └── types/                  # Shared TypeScript definitions
-├── scripts/                    # Build and dev scripts
-├── rspack.config.ts           # Bundler configuration
-└── package.json               # Dependencies and scripts
+│   ├── App.tsx                  # App shell and feature cards
+│   ├── index.tsx                # React entry
+│   ├── renderer/
+│   │   ├── components/          # Sidebar and UI widgets
+│   │   ├── features/            # WinBox window creators
+│   │   ├── lib/                 # Frontend helpers and window manager
+│   │   └── utils/               # WinBox utilities
+│   ├── main/
+│   │   ├── handlers/            # IPC handlers
+│   │   └── lib/                 # Main-process helpers
+│   └── shared/                  # Shared menu data and helpers
+├── scripts/                     # Build/dev scripts (.ts + compiled .js)
+├── rspack.config.ts             # Renderer bundler config
+└── package.json                 # Scripts, deps, electron-builder config
 ```
 
-### Process Communication
+## Documentation
 
-Type-safe IPC between main and renderer processes ensures reliable communication without runtime errors.
+- `docs/AGENTS.md` agent onboarding and safe editing notes.
+- `docs/PROJECT_MAP.md` directory map and key file pointers.
+- `docs/ARCHITECTURE.md` process layout and data flow.
+- `docs/DEVELOPMENT.md` dev workflow and script behavior.
+- `docs/BUILD_AND_RELEASE.md` build pipeline and packaging notes.
 
-### Window Management
+## Notes
 
-Integrated WinBox.js provides floating, resizable windows for multi-window applications with professional styling.
+- `main.cjs`, `preload.js`, and `scripts/*.js` are runtime artifacts. Keep them in sync with their TypeScript sources.
+- `bun run start` is defined in `package.json`, but `scripts/start.js` is not present in this repo.
+- There are two preload sources. Runtime uses `preload.ts` in the repo root.
 
----
+## Extending The App
 
-## Technology Stack
-
-| Component          | Technology                  | Purpose                           |
-|-------------------|---------------------------|-----------------------------------|
-| Framework         | Electron 40               | Cross-platform desktop runtime    |
-| UI Library        | React 19                  | Component-based user interfaces   |
-| Bundler           | RSPack 1.7                | High-performance asset bundling   |
-| Language          | TypeScript 5.9            | Type-safe development             |
-| Runtime           | Bun                       | Fast package management and execution |
-| Styling           | CSS Modules / Styled Components | Component-scoped styling    |
-| Packaging         | electron-builder          | Distribution and installer creation |
-| Window Management | WinBox.js                 | Floating window system            |
-
----
-
-## Use Cases
-
-This starter is ideal for:
-
-- **Enterprise Applications**: Internal tools, dashboards, and admin panels
-- **Developer Tools**: IDEs, code editors, and debugging utilities
-- **SaaS Desktop Clients**: Companion applications for web services
-- **Data Visualization**: Analytics tools and reporting dashboards
-- **Productivity Software**: Note-taking, project management, and workflow tools
-- **Media Applications**: Audio/video players and editing tools
-
----
-
-## Customization
-
-### Adding New Features
-
-1. Create feature components in `src/renderer/features/`
-2. Add IPC handlers in `src/main/handlers/`
-3. Update window creators in `src/renderer/utils/winbox-utils.ts`
-
-### Modifying the Build
-
-Edit `rspack.config.ts` to customize:
-- Entry points and output
-- Loader configurations
-- Plugin settings
-- Development server options
-
-### Theming
-
-Customize the appearance by editing:
-- `src/App.css` for global styles
-- Component-level CSS for scoped styling
-- WinBox configuration in `winbox-utils.ts` for window themes
-
----
-
-## Performance Benchmarks
-
-Based on typical applications:
-
-- **Development startup**: < 2 seconds
-- **Hot reload**: < 100ms
-- **Production build**: 5-10 seconds (vs 30-60s with webpack)
-- **Bundle size**: Optimized with tree shaking and code splitting
-
----
-
-## Requirements
-
-- **Bun**: v1.0.0 or higher
-- **Node.js**: v18.0.0 or higher (for Electron compatibility)
-- **Operating Systems**:
-  - macOS 10.14+ (for Mac builds)
-  - Windows 10+ (for Windows builds)
-  - Ubuntu 18.04+ / Fedora 30+ (for Linux builds)
-
----
-
-## Contributing
-
-Contributions are welcome. Please ensure:
-
-1. TypeScript compiles without errors (`bun run tsc`)
-2. Code follows existing patterns and conventions
-3. Changes are tested across platforms when applicable
-4. Documentation is updated for significant changes
-
----
-
-## Support
-
-For issues, questions, or feature requests:
-
-- Open an issue on GitHub
-- Review existing documentation and examples
-- Check the Electron and RSPack documentation for underlying technology questions
-
----
+1. Add a new card in `src/shared/menu-data.ts`.
+2. Create a new window creator in `src/renderer/features/`.
+3. Wire the window creator in `src/App.tsx`.
+4. If you need main-process data, add a handler in `src/main/handlers/` and expose it via `preload.ts`.
 
 ## License
 
-MIT License. See [LICENSE](LICENSE) file for full details.
-
----
-
-## Acknowledgments
-
-Built with:
-- [Electron](https://www.electronjs.org/)
-- [React](https://react.dev/)
-- [RSPack](https://www.rspack.dev/)
-- [WinBox.js](https://nextapps-de.github.io/winbox/)
+MIT. See `LICENSE`.
