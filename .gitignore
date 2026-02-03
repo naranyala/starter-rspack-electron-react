@@ -1,0 +1,10 @@
+
+
+node_modules/
+dist/
+dist-ts/
+dist-electron/
+release/
+*.cjs
+*.js
+preload.js

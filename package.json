@@ -1,0 +1,95 @@
+{
+  "name": "electron-react-rspack",
+  "version": "0.1.2",
+  "description": "Boilerplate using Rspack as bundler for Electron apps.",
+  "main": "main.cjs",
+  "module": "main.cjs",
+  "scripts": {
+    "dev": "bun scripts/dev-runner.js",
+    "build": "bun scripts/build.js",
+    "start": "bun scripts/start.js",
+    "dist": "bun scripts/package.js",
+    "icons": "bun scripts/icons.js",
+    "install:electron": "bun scripts/start.js --install",
+    "tsc": "tsc",
+    "tsc:watch": "tsc --watch",
+    "prebuild": "tsc",
+    "postbuild": "cp dist-ts/main.js main.cjs && cp dist-ts/preload.js preload.js && mkdir -p src/main && cp -r dist-ts/src/main/handlers src/main/",
+    "clean": "rm -rf dist dist-ts *.cjs *.js",
+    "install": "bun install"
+  },
+  "author": "naranyala",
+  "build": {
+    "appId": "com.some.electron.quickstart",
+    "dmg": {
+      "contents": [
+        {
+          "x": 110,
+          "y": 150
+        },
+        {
+          "x": 240,
+          "y": 150,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ]
+    },
+    "linux": {
+      "category": "Utility",
+      "target": [
+        "AppImage",
+        "deb"
+      ],
+      "icon": "dist/icon.ico"
+    },
+    "win": {
+      "target": "msi",
+      "icon": "dist/icon.ico"
+    },
+    "files": [
+      "main.cjs",
+      "dist/**/*"
+    ]
+  },
+  "keywords": [
+    "rspack",
+    "react",
+    "electron"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "clsx": "^2.1.1",
+    "electron-squirrel-startup": "^1.0.1",
+    "goober": "^2.1.16",
+    "get-port": "^7.1.0",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "ts-node": "^10.9.2",
+    "winbox": "^0.2.82"
+  },
+  "devDependencies": {
+    "@rspack/cli": "^1.7.4",
+    "@rspack/core": "^1.7.4",
+    "@rspack/plugin-html": "^0.5.8",
+    "@types/electron": "^1.6.12",
+    "@types/html-webpack-plugin": "^3.2.9",
+    "@types/minimatch": "^6.0.0",
+    "@types/node": "^25.2.0",
+    "@types/react": "^19.2.10",
+    "@types/react-dom": "^19.2.3",
+    "@types/wait-on": "^5.3.4",
+    "@types/webpack": "^5.28.5",
+    "css-loader": "^7.1.3",
+    "electron": "^40.1.0",
+    "electron-builder": "^26.7.0",
+    "electron-is-dev": "^3.0.1",
+    "electron-reload": "^1.5.0",
+    "fs-extra": "^11.3.3",
+    "html-webpack-plugin": "^5.6.6",
+    "mini-css-extract-plugin": "^2.10.0",
+    "style-loader": "^4.0.0",
+    "typescript": "^5.9.3",
+    "wait-on": "^9.0.3"
+  }
+}

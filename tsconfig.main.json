@@ -1,0 +1,22 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": ".",
+    "rootDir": ".",
+    "noEmit": false
+  },
+  "include": [
+    "main.ts",
+    "preload.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "build",
+    "src/**/*",
+    "scripts/**/*",
+    "rspack.config.ts",
+    "rspack.config.cjs.ts",
+    "dist-ts"
+  ]
+}
